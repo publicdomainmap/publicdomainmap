@@ -81,8 +81,6 @@ services:
     env_file:
       - settings.env
     command: ["/usr/local/bin/openstreetmap-cgimap", "--port=8000", "--instances=30"]
-    volumes:
-      - ../data:/shared
     depends_on:
       - postgres
 

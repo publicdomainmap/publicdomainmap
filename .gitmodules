@@ -1,0 +1,15 @@
+[submodule "api"]
+	path = api
+	url = https://github.com/opendataland/api.git
+[submodule "render"]
+	path = render
+	url = https://github.com/opendataland/render.git
+[submodule "openstreetmap-cgimap"]
+	path = openstreetmap-cgimap
+	url = https://github.com/opendataland/openstreetmap-cgimap.git
+[submodule "tasking-manager"]
+	path = tasking-manager
+	url = https://github.com/opendataland/tasking-manager.git
+[submodule "editor"]
+	path = editor
+	url = https://github.com/opendataland/editor.git
