@@ -1,0 +1,144 @@
+version: "3" 
+services:
+  nginx:
+    #restart: always
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    #  - "443:443"
+    env_file:
+      - settings.env
+    volumes:
+      - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../nginx/logs:/var/log/nginx
+      - id_assets:/app/vendor/assets/iD
+    depends_on:
+      - cgimap
+      - api
+
+  postgres:
+    image: postgis/postgis:13-3.1-alpine
+    env_file:
+      - settings.env
+    volumes:
+      - ../postgres/init.d/initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
+      - ../postgres/data:/var/lib/postgresql/data
+
+  editor:
+    build:
+      context: ../editor
+      dockerfile: Dockerfile
+    volumes:
+      - ../editor:/usr/src/editor
+      - id_node_modules:/usr/src/editor/node_modules
+      - id_assets:/var/www/pdosm/editor/master
+    env_file:
+      - settings.env
+    tty: true
+    command: ["npm", "run", "all"]
+
+  pgadmin:
+    image: "dpage/pgadmin4:snapshot"
+    logging:
+      driver: "none"
+    ports:
+      - "3000:80"
+    env_file:
+      - settings.env
+    volumes:
+      - ../data/pgadmin:/pgadmin
+
+  api:
+    build:
+      context: ../api
+      dockerfile: ./Dockerfile
+    env_file:
+      - settings.env
+    volumes:
+      - ../api:/usr/src/app
+      - api_node_modules:/usr/src/app/node_modules
+    tty: true
+    ports:
+      - 8000:8000
+    command: ['sh', 'start.sh']
+  
+  render:
+    build:
+      context: ../render
+      dockerfile: ./Dockerfile
+    env_file:
+      - settings.env
+    volumes:
+      - ../data:/shared
+      - ../render/osmosisworkingdir:/osmosisworkingdir
+    command: ['bash']
+    tty: true
+  
+  cgimap:
+    build:
+      context: ../openstreetmap-cgimap
+      dockerfile: ./Dockerfile
+    env_file:
+      - settings.env
+    command: ["/usr/local/bin/openstreetmap-cgimap", "--port=8000", "--instances=30"]
+    volumes:
+      - ../data:/shared
+    depends_on:
+      - postgres
+
+  tm_backend:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+    env_file:
+      - tm.env
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    depends_on:
+      - postgres
+
+  tm_migration:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+    env_file:
+      - tm.env
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    command: python manage.py db upgrade
+
+  tm_frontend:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.frontend
+    env_file:
+      - tm.env
+    ports:
+      - 6000:80
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    depends_on:
+      - tm_backend
+
+  pg_tileserv:
+    image: pramsey/pg_tileserv:latest
+    env_file:
+      - settings.env
+    ports:
+      - 7000:7800
+    depends_on:
+      - postgres
+
+  pg_featureserv:
+    image: pramsey/pg_featureserv:latest
+    env_file:
+      - settings.env
+    ports:
+      - 9000:9000
+    depends_on:
+      - postgres
+
+volumes:
+  api_node_modules:
+  id_node_modules:
+  id_assets:
