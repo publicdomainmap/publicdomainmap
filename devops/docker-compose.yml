@@ -30,8 +30,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../editor:/usr/src/editor
-      - id_node_modules:/usr/src/editor/node_modules
-      - id_assets:/var/www/pdosm/editor/master
+      - id_node_modules:/usr/src/editor/node_modules 
+      - id_assets:/var/www/opendataland/editor/master
     env_file:
       - settings.env
     tty: true
