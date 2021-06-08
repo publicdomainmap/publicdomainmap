@@ -31,7 +31,7 @@ services:
     volumes:
       - ../editor:/usr/src/editor
       - id_node_modules:/usr/src/editor/node_modules 
-      - id_assets:/var/www/opendataland/editor/master
+      - id_assets:/var/www/publicdomainmap/editor/master
     env_file:
       - settings.env
     tty: true

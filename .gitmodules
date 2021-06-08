@@ -1,20 +1,20 @@
 [submodule "api"]
 	path = api
-	url = https://github.com/opendataland/api.git
+	url = https://github.com/publicdomainmap/api.git
 	shallow = true
 [submodule "render"]
 	path = render
-	url = https://github.com/opendataland/render.git
+	url = https://github.com/publicdomainmap/render.git
 	shallow = true
 [submodule "openstreetmap-cgimap"]
 	path = openstreetmap-cgimap
-	url = https://github.com/opendataland/openstreetmap-cgimap.git
+	url = https://github.com/publicdomainmap/openstreetmap-cgimap.git
 	shallow = true
 [submodule "tasking-manager"]
 	path = tasking-manager
-	url = https://github.com/opendataland/tasking-manager.git
+	url = https://github.com/publicdomainmap/tasking-manager.git
 	shallow = true
 [submodule "editor"]
 	path = editor
-	url = https://github.com/opendataland/editor.git
+	url = https://github.com/publicdomainmap/editor.git
 	shallow = true
