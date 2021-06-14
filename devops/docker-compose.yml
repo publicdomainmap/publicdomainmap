@@ -21,7 +21,8 @@ services:
     env_file:
       - settings.env
     volumes:
-      - ../postgres/init.d/initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
+      - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
+      - ../postgres/init.d/:/custom-initdb.d
       - ../postgres/data:/var/lib/postgresql/data
 
   editor:

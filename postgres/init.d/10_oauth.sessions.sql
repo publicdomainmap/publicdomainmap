@@ -3,6 +3,8 @@
 -- DROP TABLE oauth.sessions;
 
 \c openstreetmap
+CREATE SCHEMA IF NOT EXISTS oauth; 
+
 CREATE TABLE IF NOT EXISTS oauth.sessions
 (
     created_time timestamp without time zone,
