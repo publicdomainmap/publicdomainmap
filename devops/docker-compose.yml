@@ -13,6 +13,8 @@ services:
       - ../nginx/logs:/var/log/nginx
       - id_assets:/app/vendor/assets/iD
       - website_assets:/app/vendor/assets/website
+      - cert_www:/var/www/certbot
+      - cert_conf:/etc/letsencrypt
     depends_on:
       - cgimap
       - website
@@ -129,14 +131,14 @@ services:
     depends_on:
       - tm_backend
 
-  pg_tileserv:
-    image: pramsey/pg_tileserv:latest
-    env_file:
-      - settings.env
-    ports:
-      - 7000:7800
-    depends_on:
-      - postgres
+  #pg_tileserv:
+  #  image: pramsey/pg_tileserv:latest
+  #  env_file:
+  #    - settings.env
+  #  ports:
+  #    - 7000:7800
+  #  depends_on:
+  #    - postgres
 
   pg_featureserv:
     image: pramsey/pg_featureserv:latest
@@ -147,8 +149,19 @@ services:
     depends_on:
       - postgres
 
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - cert_conf:/etc/letsencrypt
+      - cert_www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12d & wait $${!}; done;'"
+
+
 volumes:
   api_node_modules:
   id_node_modules:
   id_assets:
   website_assets:
+  cert_conf:
+  cert_www:
