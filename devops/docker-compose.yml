@@ -1,11 +1,11 @@
 version: "3" 
 services:
   nginx:
-    #restart: always
+    restart: always
     image: nginx:stable-alpine
     ports:
       - "80:80"
-    #  - "443:443"
+      - "443:443"
     env_file:
       - settings.env
     volumes:
@@ -13,8 +13,8 @@ services:
       - ../nginx/logs:/var/log/nginx
       - id_assets:/app/vendor/assets/iD
       - website_assets:/app/vendor/assets/website
-      - cert_www:/var/www/certbot
-      - cert_conf:/etc/letsencrypt
+      - ../cert/www:/var/www/certbot
+      - ../cert/conf:/etc/letsencrypt
     depends_on:
       - cgimap
       - website
@@ -153,8 +153,8 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - cert_conf:/etc/letsencrypt
-      - cert_www:/var/www/certbot
+      - ../cert/conf:/etc/letsencrypt
+      - ../cert/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12d & wait $${!}; done;'"
 
 
@@ -163,5 +163,3 @@ volumes:
   id_node_modules:
   id_assets:
   website_assets:
-  cert_conf:
-  cert_www:

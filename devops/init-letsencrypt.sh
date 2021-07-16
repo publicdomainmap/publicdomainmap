@@ -15,9 +15,9 @@ domains=(
 )
 
 rsa_key_size=4096
-data_path="../ssl"
+data_path="../cert"
 email="jmc+publicdomainmap@loc8.us" # Adding a valid address is strongly recommended
-staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
+staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 # #################################################################
 # Code
@@ -52,7 +52,7 @@ for domain in "${domains[@]}"; do
 done
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d --no-deps nginx
+docker-compose --file ./ssl-docker-compose.yml up --force-recreate -d --no-deps nginx
 echo
 
 for domain in "${domains[@]}"; do
