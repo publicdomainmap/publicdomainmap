@@ -1,0 +1,76 @@
+version: "3" 
+services:
+  nginx:
+    restart: always
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - settings.env
+    volumes:
+      # - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../nginx/conf.d/tm.dev.conf:/etc/nginx/conf.d/app.conf
+      - ../nginx/logs:/var/log/nginx
+      - id_assets:/app/vendor/assets/iD
+      - website_assets:/app/vendor/assets/website
+      - ../cert/www:/var/www/certbot
+      - ../cert/conf:/etc/letsencrypt
+
+  postgres:
+    image: postgis/postgis:13-3.1-alpine
+    env_file:
+      - settings.env
+    volumes:
+      - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
+      - ../postgres/init.d/:/custom-initdb.d
+      - ../postgres/data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: "dpage/pgadmin4:snapshot"
+    logging:
+      driver: "none"
+    ports:
+      - "3000:80"
+    env_file:
+      - settings.env
+    volumes:
+      - ../data/pgadmin:/pgadmin
+  
+  tm_backend:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+    env_file:
+      - tm.env
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    depends_on:
+      - postgres
+
+  tm_migration:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+    env_file:
+      - tm.env
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    command: python manage.py db upgrade
+
+  tm_frontend:
+    build:
+      context: ../tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.frontend
+    env_file:
+      - tm.env
+    ports:
+      - 6000:80
+    volumes:
+      -  ../tasking-manager:/usr/src/app
+    depends_on:
+      - tm_backend
+
+volumes:
+  id_assets:
+  website_assets:
