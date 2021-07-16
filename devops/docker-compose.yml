@@ -10,6 +10,7 @@ services:
       - settings.env
     volumes:
       - ../nginx/conf.d:/etc/nginx/conf.d
+      # - ../nginx/conf.d/website.dev.conf:/etc/nginx/conf.d/app.conf
       - ../nginx/logs:/var/log/nginx
       - id_assets:/app/vendor/assets/iD
       - website_assets:/app/vendor/assets/website
