@@ -1,0 +1,46 @@
+version: "3" 
+services:
+  postgres:
+    image: postgis/postgis:13-3.1-alpine
+    env_file:
+      - settings.env
+    volumes:
+      - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
+      - ../postgres/init.d/:/custom-initdb.d
+      - ../postgres/data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: "dpage/pgadmin4:snapshot"
+    logging:
+      driver: "none"
+    ports:
+      - "3000:80"
+    env_file:
+      - settings.env
+    volumes:
+      - ../data/pgadmin:/pgadmin
+
+  render:
+    build:
+      context: ../render
+      dockerfile: ./Dockerfile
+    env_file:
+      - settings.env
+    volumes:
+      - ../data:/shared
+      - ../render/osmosisworkingdir:/osmosisworkingdir
+    command: ['bash']
+    tty: true
+    depends_on:
+      - postgres
+
+  gdal:
+    image: osgeo/gdal:ubuntu-small-latest
+    env_file:
+      - settings.env
+    volumes:
+      - ../data:/shared
+    command: ['bash']
+    tty: true
+    depends_on:
+      - postgres
