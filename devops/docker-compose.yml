@@ -52,16 +52,16 @@ services:
     tty: true
     command: ["npm", "run", "all"]
 
-  pgadmin:
-    image: "dpage/pgadmin4:snapshot"
-    logging:
-      driver: "none"
-    ports:
-      - "3000:80"
-    env_file:
-      - settings.env
-    volumes:
-      - ../data/pgadmin:/pgadmin
+  #pgadmin:
+  #  image: "dpage/pgadmin4:snapshot"
+  #  logging:
+  #    driver: "none"
+  #  ports:
+  #    - "3000:80"
+  #  env_file:
+  #    - settings.env
+  #  volumes:
+  #    - ../data/pgadmin:/pgadmin
 
   api:
     build:
@@ -77,17 +77,17 @@ services:
       - 8000:8000
     command: ['sh', 'start.sh']
   
-  render:
-    build:
-      context: ../render
-      dockerfile: ./Dockerfile
-    env_file:
-      - settings.env
-    volumes:
-      - ../data:/shared
-      - ../render/osmosisworkingdir:/osmosisworkingdir
-    command: ['bash']
-    tty: true
+  #render:
+  #  build:
+  #    context: ../render
+  #    dockerfile: ./Dockerfile
+  #  env_file:
+  #    - settings.env
+  #  volumes:
+  #    - ../data:/shared
+  #    - ../render/osmosisworkingdir:/osmosisworkingdir
+  #  command: ['bash']
+  #  tty: true
   
   cgimap:
     build:
@@ -142,14 +142,14 @@ services:
   #  depends_on:
   #    - postgres
 
-  pg_featureserv:
-    image: pramsey/pg_featureserv:latest
-    env_file:
-      - settings.env
-    ports:
-      - 9000:9000
-    depends_on:
-      - postgres
+  #pg_featureserv:
+  #  image: pramsey/pg_featureserv:latest
+  #  env_file:
+  #    - settings.env
+  #  ports:
+  #    - 9000:9000
+  #  depends_on:
+  #    - postgres
 
 
   certbot:
