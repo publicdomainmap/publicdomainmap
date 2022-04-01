@@ -1,3 +1,7 @@
+# ################################################################
+# This is used for development and testing of the Tasking Managers
+# ################################################################
+
 version: "3" 
 services:
   nginx:
@@ -31,7 +35,7 @@ services:
     logging:
       driver: "none"
     ports:
-      - "3000:80"
+      - "3001:80"
     env_file:
       - settings.env
     volumes:
@@ -62,6 +66,9 @@ services:
     build:
       context: ../tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.frontend
+      args:
+        - ID_CONSUMER_KEY=cEs4gSjMmtm0Rq0CQPnkOVYoymoOQMvn5iVpxO1A
+        - ID_CONSUMER_SECRET=WOPMfHEWzH14vloYz7u5ad1gupVaAAl5aIuJEFAu
     env_file:
       - tm.env
     ports:

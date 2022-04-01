@@ -12,6 +12,7 @@ services:
       - ../nginx/conf.d:/etc/nginx/conf.d
       # - ../nginx/conf.d/website.dev.conf:/etc/nginx/conf.d/app.conf
       - ../nginx/logs:/var/log/nginx
+      - ../static:/var/www/static
       - id_assets:/app/vendor/assets/iD
       - website_assets:/app/vendor/assets/website
       - ../cert/www:/var/www/certbot
