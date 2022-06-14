@@ -26,8 +26,9 @@ This "all-in-one" approach is great for development and testing. If this is goin
 2. Copy the settings File:
 `cp ./compose/example.settings.env ./compose/settings.env`
 
-3. Do the usual docker-compose tasks:
+3. Do the usual docker-compose tasks in the devops directory:
 ```
+cd ./devops
 docker-compose build
 docker-compose up
 ```
