@@ -21,14 +21,17 @@ This is the "scaffolding" to run the opendata.land website. It includes:
 This "all-in-one" approach is great for development and testing. If this is going to be deployed into production, you may want to split the services onto different servers.
 
 1. Clone this repo and its submodules
-`git clone --recurse-submodules -j8 https://github.com/publicdomainmap/devops.git`
+`git clone --recurse-submodules -j8 https://github.com/publicdomainmap/publicdomainmap.git`
 
-2. Copy the settings File:
-`cp ./compose/example.settings.env ./compose/settings.env`
+2. Change directory into the publicdomainmap directory
+`cd ./publicdomainmap`
 
-3. Do the usual docker-compose tasks in the devops directory:
+3. Copy the settings File:
+`cp ./devops/example.settings.env ./devops/compose/settings.env`
+
+3. Do the usual docker-compose tasks in the ./devops directory:
 ```
-cd ./devops
+cd ./publicdomainmap/devops
 docker-compose build
 docker-compose up
 ```
