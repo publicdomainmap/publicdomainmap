@@ -2,10 +2,6 @@
 	path = api
 	url = https://github.com/publicdomainmap/api.git
 	shallow = true
-[submodule "render"]
-	path = render
-	url = https://github.com/publicdomainmap/render.git
-	shallow = true
 [submodule "openstreetmap-cgimap"]
 	path = openstreetmap-cgimap
 	url = https://github.com/publicdomainmap/openstreetmap-cgimap.git
@@ -13,10 +9,6 @@
 [submodule "tasking-manager"]
 	path = tasking-manager
 	url = https://github.com/publicdomainmap/tasking-manager.git
-	shallow = true
-[submodule "editor"]
-	path = editor
-	url = https://github.com/publicdomainmap/editor.git
 	shallow = true
 [submodule "publicdomainmap.github.io"]
 	path = publicdomainmap.github.io

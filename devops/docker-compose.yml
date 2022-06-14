@@ -13,7 +13,7 @@ services:
       # - ../nginx/conf.d/website.dev.conf:/etc/nginx/conf.d/app.conf
       - ../nginx/logs:/var/log/nginx
       - ../static:/var/www/static
-      - id_assets:/app/vendor/assets/iD
+      # - id_assets:/app/vendor/assets/iD
       - website_assets:/app/vendor/assets/website
       - ../cert/www:/var/www/certbot
       - ../cert/conf:/etc/letsencrypt
@@ -39,18 +39,18 @@ services:
       - ../postgres/init.d/:/custom-initdb.d
       - ../postgres/data:/var/lib/postgresql/data
 
-  editor:
-    build:
-      context: ../editor
-      dockerfile: Dockerfile
-    volumes:
-      - ../editor:/usr/src/editor
-      - id_node_modules:/usr/src/editor/node_modules 
-      - id_assets:/var/www/publicdomainmap/editor/master
-    env_file:
-      - settings.env
-    tty: true
-    command: ["npm", "run", "all"]
+  #editor:
+  #  build:
+  #    context: ../editor
+  #    dockerfile: Dockerfile
+  #  volumes:
+  #    - ../editor:/usr/src/editor
+  #    - id_node_modules:/usr/src/editor/node_modules 
+  #    - id_assets:/var/www/publicdomainmap/editor/master
+  #  env_file:
+  #    - settings.env
+  #  tty: true
+  #  command: ["npm", "run", "all"]
 
   #pgadmin:
   #  image: "dpage/pgadmin4:snapshot"
@@ -163,5 +163,5 @@ services:
 volumes:
   api_node_modules:
   id_node_modules:
-  id_assets:
   website_assets:
+  # id_assets:
