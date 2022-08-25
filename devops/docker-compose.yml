@@ -32,7 +32,7 @@ services:
     command: ["/srv/jekyll/build.sh"]
 
   postgres:
-    image: postgis/postgis:13-3.1-alpine
+    image: postgis/postgis:14-3.2-alpine
     env_file:
       - settings.env
     volumes:
