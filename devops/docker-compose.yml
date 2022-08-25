@@ -1,7 +1,7 @@
 version: "3" 
 services:
   nginx:
-    restart: always
+    restart: always # cgimap has to wait for postgres
     image: nginx:stable-alpine
     ports:
       - "80:80"
@@ -91,6 +91,7 @@ services:
   #  tty: true
   
   cgimap:
+    restart: always # postgres can take a sec to get online
     build:
       context: ../openstreetmap-cgimap
       dockerfile: ./Dockerfile
@@ -143,14 +144,15 @@ services:
   #  depends_on:
   #    - postgres
 
-  #pg_featureserv:
-  #  image: pramsey/pg_featureserv:latest
-  #  env_file:
-  #    - settings.env
-  #  ports:
-  #    - 9000:9000
-  #  depends_on:
-  #    - postgres
+  pg_featureserv:
+    restart: always
+    image: pramsey/pg_featureserv:latest
+    env_file:
+      - settings.env
+    ports:
+      - 9000:9000
+    depends_on:
+      - postgres
 
 
   certbot:
