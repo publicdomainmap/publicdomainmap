@@ -15,4 +15,4 @@
 	url = https://github.com/publicdomainmap/publicdomainmap.github.io.git
 [submodule "editor"]
 	path = editor
-	url = https://github.com/publicdomainmap/editor
+	url = https://github.com/publicdomainmap/editor.git
