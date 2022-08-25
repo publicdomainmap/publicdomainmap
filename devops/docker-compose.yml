@@ -1,4 +1,4 @@
-version: "3" 
+version: "3"
 services:
   nginx:
     restart: always # cgimap has to wait for postgres
@@ -77,7 +77,7 @@ services:
     ports:
       - 8000:8000
     command: ['sh', 'start.sh']
-  
+
   #render:
   #  build:
   #    context: ../render
@@ -89,7 +89,7 @@ services:
   #    - ../render/osmosisworkingdir:/osmosisworkingdir
   #  command: ['bash']
   #  tty: true
-  
+
   cgimap:
     restart: always # postgres can take a sec to get online
     build:
