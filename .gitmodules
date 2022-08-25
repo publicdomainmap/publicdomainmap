@@ -13,3 +13,6 @@
 [submodule "publicdomainmap.github.io"]
 	path = publicdomainmap.github.io
 	url = https://github.com/publicdomainmap/publicdomainmap.github.io.git
+[submodule "editor"]
+	path = editor
+	url = https://github.com/publicdomainmap/editor
