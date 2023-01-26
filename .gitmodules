@@ -10,6 +10,3 @@
 	path = tasking-manager
 	url = https://github.com/publicdomainmap/tasking-manager.git
 	shallow = true
-[submodule "publicdomainmap.github.io"]
-	path = publicdomainmap.github.io
-	url = https://github.com/publicdomainmap/publicdomainmap.github.io.git

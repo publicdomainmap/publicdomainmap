@@ -10,25 +10,14 @@ services:
       - settings.env
     volumes:
       - ../nginx/conf.d:/etc/nginx/conf.d
-      # - ../nginx/conf.d/website.dev.conf:/etc/nginx/conf.d/app.conf
       - ../nginx/logs:/var/log/nginx
       - ../static:/var/www/static
       # - id_assets:/app/vendor/assets/iD
-      - website_assets:/app/vendor/assets/website
       - ../cert/www:/var/www/certbot
       - ../cert/conf:/etc/letsencrypt
     depends_on:
       - cgimap
-      - website
       - api
-
-  website:
-    image: jekyll/jekyll:builder
-    tty: true
-    volumes:
-      - ../publicdomainmap.github.io:/srv/jekyll/
-      - website_assets:/srv/jekyll/_site
-    command: ["/srv/jekyll/build.sh"]
 
   postgres:
     image: postgis/postgis:13-3.1-alpine
@@ -163,5 +152,4 @@ services:
 volumes:
   api_node_modules:
   id_node_modules:
-  website_assets:
   # id_assets:
