@@ -1,6 +1,5 @@
 devops/settings.env
 devops/.env
-devops/tm.env
 cert
 
 postgres/data/

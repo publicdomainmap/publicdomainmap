@@ -10,7 +10,6 @@ fi
 domains=(
   publicdomainmap.org
   www.publicdomainmap.org
-  tm.publicdomainmap.org
   featureserv.publicdomainmap.org
 )
 

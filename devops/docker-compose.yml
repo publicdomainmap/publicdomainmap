@@ -12,7 +12,6 @@ services:
       - ../nginx/conf.d:/etc/nginx/conf.d
       - ../nginx/logs:/var/log/nginx
       - ../static:/var/www/static
-      # - id_assets:/app/vendor/assets/iD
       - ../cert/www:/var/www/certbot
       - ../cert/conf:/etc/letsencrypt
     depends_on:
@@ -27,19 +26,6 @@ services:
       - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
       - ../postgres/init.d/:/custom-initdb.d
       - ../postgres/data:/var/lib/postgresql/data
-
-  #editor:
-  #  build:
-  #    context: ../editor
-  #    dockerfile: Dockerfile
-  #  volumes:
-  #    - ../editor:/usr/src/editor
-  #    - id_node_modules:/usr/src/editor/node_modules 
-  #    - id_assets:/var/www/publicdomainmap/editor/master
-  #  env_file:
-  #    - settings.env
-  #  tty: true
-  #  command: ["npm", "run", "all"]
 
   #pgadmin:
   #  image: "dpage/pgadmin4:snapshot"
@@ -88,40 +74,6 @@ services:
     depends_on:
       - postgres
 
-  tm_backend:
-    build:
-      context: ../tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.backend
-    env_file:
-      - tm.env
-    volumes:
-      -  ../tasking-manager:/usr/src/app
-    depends_on:
-      - postgres
-
-  tm_migration:
-    build:
-      context: ../tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.backend
-    env_file:
-      - tm.env
-    volumes:
-      -  ../tasking-manager:/usr/src/app
-    command: python manage.py db upgrade
-
-  tm_frontend:
-    build:
-      context: ../tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.frontend
-    env_file:
-      - tm.env
-    ports:
-      - 6000:80
-    volumes:
-      -  ../tasking-manager:/usr/src/app
-    depends_on:
-      - tm_backend
-
   #pg_tileserv:
   #  image: pramsey/pg_tileserv:latest
   #  env_file:
@@ -151,5 +103,3 @@ services:
 
 volumes:
   api_node_modules:
-  id_node_modules:
-  # id_assets:

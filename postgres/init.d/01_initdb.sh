@@ -55,20 +55,3 @@ wget -O - -o /dev/null "https://raw.github.com/openstreetmap/openstreetmap-websi
     GRANT SELECT ON ALL TABLES IN SCHEMA public TO $SERV_USERNAME;
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO $SERV_USERNAME;
 "
-
-## Tasking Manager
-# Create 'tm' user and database
-"${psql[@]}" -c "
-    CREATE DATABASE \"$TM_POSTGRES_DB\";
-"
-
-"${psql[@]}" --dbname="$TM_POSTGRES_DB" -c "
-    -- Enable PostGIS (as of 3.0 contains just geometry/geography)
-    CREATE EXTENSION postgis;
-"
-
-"${psql[@]}" --dbname="$TM_POSTGRES_DB" -c "
-    -- pg_snapshot Prod
-    CREATE USER $TM_POSTGRES_USER SUPERUSER PASSWORD '$TM_POSTGRES_PASSWORD';
-    GRANT ALL PRIVILEGES ON DATABASE $TM_POSTGRES_DB TO $TM_POSTGRES_USER;
-"

@@ -6,7 +6,3 @@
 	path = openstreetmap-cgimap
 	url = https://github.com/publicdomainmap/openstreetmap-cgimap.git
 	shallow = true
-[submodule "tasking-manager"]
-	path = tasking-manager
-	url = https://github.com/publicdomainmap/tasking-manager.git
-	shallow = true
