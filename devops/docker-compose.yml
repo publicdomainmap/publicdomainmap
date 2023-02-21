@@ -1,105 +1,67 @@
-version: "3" 
+version: "3"
+
+# Define services that will be used in the project
 services:
+  # Nginx service that will serve as a reverse proxy to the API and front-end
   nginx:
     restart: always
     image: nginx:stable-alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80" # Expose HTTP on port 80
+      - "443:443" # Expose HTTPS on port 443
     env_file:
-      - settings.env
+      - settings.env # Load environment variables from file
     volumes:
-      - ../nginx/conf.d:/etc/nginx/conf.d
-      - ../nginx/logs:/var/log/nginx
-      - ../static:/var/www/static
-      - ../cert/www:/var/www/certbot
-      - ../cert/conf:/etc/letsencrypt
+      - ../nginx/conf.d:/etc/nginx/conf.d # Nginx configuration
+      - ../nginx/logs:/var/log/nginx # Nginx logs
+      - ../static:/var/www/static # Static assets
+      - ../cert/www:/var/www/certbot # Certbot
+      - ../cert/conf:/etc/letsencrypt # SSL certificates
     depends_on:
-      - cgimap
-      - api
+      - cgimap # Depend on the cgimap service
+      - api # Depend on the api service
 
+  # Postgres service with PostGIS extension enabled
   postgres:
     image: postgis/postgis:13-3.1-alpine
     env_file:
-      - settings.env
+      - settings.env # Load environment variables from file
     volumes:
-      - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh
-      - ../postgres/init.d/:/custom-initdb.d
-      - ../postgres/data:/var/lib/postgresql/data
+      - ../postgres/custom-initdb.sh:/docker-entrypoint-initdb.d/osm-data.sh # Load OpenStreetMap Schema
+      - ../postgres/init.d/:/custom-initdb.d # Custom initialization scripts
+      - ../postgres/data:/var/lib/postgresql/data # Mount database data directory
 
-  #pgadmin:
-  #  image: "dpage/pgadmin4:snapshot"
-  #  logging:
-  #    driver: "none"
-  #  ports:
-  #    - "3000:80"
-  #  env_file:
-  #    - settings.env
-  #  volumes:
-  #    - ../data/pgadmin:/pgadmin
-
+  # API service built from custom Dockerfile
   api:
     build:
       context: ../api
       dockerfile: ./Dockerfile
     env_file:
-      - settings.env
+      - settings.env # Load environment variables from file
     volumes:
-      - ../api:/usr/src/app
-      - api_node_modules:/usr/src/app/node_modules
-    tty: true
-    ports:
-      - 8000:8000
-    command: ['sh', 'start.sh']
-  
-  #render:
-  #  build:
-  #    context: ../render
-  #    dockerfile: ./Dockerfile
-  #  env_file:
-  #    - settings.env
-  #  volumes:
-  #    - ../data:/shared
-  #    - ../render/osmosisworkingdir:/osmosisworkingdir
-  #  command: ['bash']
-  #  tty: true
-  
+      - ../api:/usr/src/app # API source code
+      - api_node_modules:/usr/src/app/node_modules # Persist Node.js modules on a volume
+    command: ['sh', 'start.sh'] # script to start the nodejs api
+
+  # CGImap service built from custom Dockerfile
   cgimap:
     build:
-      context: ../openstreetmap-cgimap
+      context: ../openstreetmap-cgimap 
       dockerfile: ./Dockerfile
     env_file:
-      - settings.env
-    command: ["/usr/local/bin/openstreetmap-cgimap", "--port=8000", "--instances=30"]
+      - settings.env # Load environment variables from file
+    command: ["/usr/local/bin/openstreetmap-cgimap", "--port=8000", "--instances=30"] # Run cgimap on port 8080
     depends_on:
-      - postgres
+      - postgres # Don't start cgimap until the postgres service is ready
 
-  #pg_tileserv:
-  #  image: pramsey/pg_tileserv:latest
-  #  env_file:
-  #    - settings.env
-  #  ports:
-  #    - 7000:7800
-  #  depends_on:
-  #    - postgres
-
-  #pg_featureserv:
-  #  image: pramsey/pg_featureserv:latest
-  #  env_file:
-  #    - settings.env
-  #  ports:
-  #    - 9000:9000
-  #  depends_on:
-  #    - postgres
-
-
+  # Certbot service for SSL certificate management
   certbot:
     image: certbot/certbot
     volumes:
-      - ../cert/conf:/etc/letsencrypt
-      - ../cert/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12d & wait $${!}; done;'"
+      - ../cert/conf:/etc/letsencrypt #  SSL certificates
+      - ../cert/www:/var/www/certbot 
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12d & wait $${!}; done;'" # Run Certbot in the background
 
-
+# Define persistent volumes that can be shared among the services
 volumes:
-  api_node_modules:
+  api_node_modules: # Node.js modules volume
